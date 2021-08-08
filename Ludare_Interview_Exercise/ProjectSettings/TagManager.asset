@@ -13,8 +13,8 @@ TagManager:
   - UI
   - Ground
   - Player
-  - Invincible
   - Enemy
+  - 
   - 
   - 
   - 
@@ -50,9 +50,18 @@ TagManager:
   - name: Player
     uniqueID: 3512442509
     locked: 0
+  - name: Coin
+    uniqueID: 3820900485
+    locked: 0
   - name: Saw
     uniqueID: 98178833
     locked: 0
   - name: Enemy
     uniqueID: 2689200447
+    locked: 0
+  - name: Goal
+    uniqueID: 2889393403
+    locked: 0
+  - name: UI
+    uniqueID: 514572113
     locked: 0

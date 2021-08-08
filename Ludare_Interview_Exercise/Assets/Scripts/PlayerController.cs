@@ -21,55 +21,69 @@ public class PlayerController : MonoBehaviour
     private LayerMask groundLayer; // layer which the player can jump off of
 
     [SerializeField]
-    private float jumpDuration;
+    private float jumpDuration; // how long the held jump lasts for
 
     [SerializeField]
-    private float invincibliltyTime;
+    private GameObject sprite; // players sprite
 
     [SerializeField]
-    private SpriteRenderer sprite;
+    private GameObject playerDeathEffect;
 
+    [SerializeField]
+    private float respawnDuration;
+
+   
+    
     // --------Back End Variables------------
 
     [Header("Back End Variables")]
-    public Transform raycastPoint; // An empty Gameobject used to track where the raycast for jumping ends
+    public Transform raycastPoint1; // An empty Gameobject used to track where the raycast for jumping ends
+    public Transform raycastPoint2; // An empty Gameobject used to track where the raycast for jumping ends
     private Rigidbody2D rb; // Players rigidbody
-    public bool grounded;
-    private float x;
-    private float jumpTimer;
-    private float originalGravity;
-    private bool isJumping;
-    private int numCurrentJumps;
-    public bool isHit;
-    private float invincibilityTimer;
-    private bool flashing;
-    private Color originalColor;
-
+    private bool grounded1; // first ray
+    private bool grounded2; // second ray
+    public bool grounded; // used to check if were on the ground
+    private float x; // x input
+    private float jumpTimer; // internal jump timer
+    private bool isJumping; // used for hold jump
+    private int numCurrentJumps; // internal jump counter
+    public bool isHit; // other objects can call this to triggger death
+    private float respawnTimer;
+    private GameObject spawnedDeathEffect;
+    [SerializeField]
+    private GameObject loseScreen;
     // Start is called before the first frame update
     void Start()
     {
         rb = gameObject.GetComponent<Rigidbody2D>();
-        originalGravity = rb.gravityScale;
-        if(originalColor.a <=0)
-        {
-            originalColor = new Color(1, 1, 1, 1);
-        }
+        respawnTimer = respawnDuration;
     }
 
     // Update is called once per frame
     void Update()
     {
-        grounded = Physics2D.Linecast(transform.position, raycastPoint.position, groundLayer); // Checks when we're on the ground or not, and saves to bool
+        // Linecast for ground check
+        grounded1 = Physics2D.Linecast(transform.position, raycastPoint1.position, groundLayer); // We use 1 on each bottom corner, because the player might be half off the ground.
+        grounded2 = Physics2D.Linecast(transform.position, raycastPoint1.position, groundLayer); 
+
+        if(grounded1 == true || grounded2 == true) // if either corner is on the ground
+        {
+            grounded = true; // the player is considered on the ground
+        }
+        else
+        {
+            grounded = false; // otherwise, he is not on the ground
+        }
 
         x = Input.GetAxis("Horizontal"); // get horizontal input
 
-        if (grounded == true) // check if on the ground
+        if (grounded == true) // if on the ground
         {
            // isJumping = false;
             numCurrentJumps = numberOfJumps; // reset jump counter
         }
 
-        if (Input.GetButtonDown("Fire1") && numCurrentJumps >0) // add short hop
+        if (Input.GetButtonDown("Fire1") && numCurrentJumps >0 && isHit == false) // add short hop
         {
             jumpTimer = jumpDuration;
             //rb.velocity = Vector3.zero;
@@ -78,7 +92,7 @@ public class PlayerController : MonoBehaviour
             numCurrentJumps -= 1;
         }
 
-        if(isJumping == true && Input.GetButton("Fire1")) // hold for higher jump
+        if(isJumping == true && Input.GetButton("Fire1") && isHit == false) // hold for higher jump
         {
             if(jumpTimer>0)
             {
@@ -91,7 +105,7 @@ public class PlayerController : MonoBehaviour
           
         }
 
-        if(Input.GetButtonUp("Fire1")) // cancel jump
+        if(Input.GetButtonUp("Fire1") && isHit == false) // cancel jump
         {
             jumpTimer = 0;
             isJumping = false;
@@ -102,16 +116,35 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        transform.position = new Vector3(transform.position.x + x * speed * Time.deltaTime, transform.position.y, transform.position.z); // move the player
+        if (isHit == false) // we do this check because we dont want him moving when he is dead
+        {
+            transform.position = new Vector3(transform.position.x + x * speed * Time.deltaTime, transform.position.y, transform.position.z); // move the player
+        }
 
-        if(jumpTimer>0)
+        if(jumpTimer>0) // jump timer allows for a held jump
         {
             jumpTimer -= Time.fixedDeltaTime; // decrease our jump timer
         }
 
         if(isHit == true) // if you are hit
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            if(spawnedDeathEffect == null) // disable collision, remove physics, and spawn a death effect.
+            {
+                spawnedDeathEffect = (GameObject)Instantiate(playerDeathEffect, transform.position, Quaternion.identity);
+                sprite.SetActive(false);
+                gameObject.GetComponent<BoxCollider2D>().enabled = false;
+                rb.velocity = Vector3.zero;
+                rb.isKinematic = true;
+               
+            }
+
+            respawnTimer -= Time.fixedDeltaTime; // start a respawn timer
+
+            if(respawnTimer<=0)
+            {
+                loseScreen.SetActive(true);
+            }
+           
         }
 
 

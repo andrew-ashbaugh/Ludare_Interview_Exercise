@@ -13,6 +13,9 @@ public class EnemyAI : MonoBehaviour
     [SerializeField]
     private GameObject explosionPrefab; // death explosion
 
+    [SerializeField]
+    private float playerBounceForce;
+
 
     private float dir; //1 -> right, -1 -> left
     private Rigidbody2D rb;
@@ -63,6 +66,10 @@ public class EnemyAI : MonoBehaviour
                 Destroy(gameObject);
                 Dead();
                 dead = true;
+                Rigidbody2D playerRb = other.gameObject.GetComponent<Rigidbody2D>();
+                playerRb.velocity = Vector3.zero;
+                playerRb.AddForce(Vector2.up * playerBounceForce);
+               
             }
             
         }
