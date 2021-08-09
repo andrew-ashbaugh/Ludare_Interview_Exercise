@@ -4,20 +4,30 @@ using UnityEngine;
 
 public class EnemyAI : MonoBehaviour
 {
+    // Used on every enemy 
+
+    //-------- Enemy Variables------------
+
+    [Header("Enemy Variables")]
     [SerializeField]
+
     private float speed; // speed of the enemy
 
     [SerializeField]
+    private float playerBounceForce; // how high the player bounces off enemies heads
+
+    [SerializeField]
+    private GameObject explosionPrefab; // enemy death explosion
+
+    [SerializeField]
+    private GameObject bumpFxPrefab; // hit off walls fx
+
+    //-------- Back End Variables------------
+
+    [Header("Back End Variables")]
+
+    [SerializeField]
     private int startingDirection; // used to make more interesting level layouts
-
-    [SerializeField]
-    private GameObject explosionPrefab; // death explosion
-
-    [SerializeField]
-    private float playerBounceForce;
-
-    [SerializeField]
-    private GameObject bumpFxPrefab;
 
     private float dir; //1 -> right, -1 -> left
     private Rigidbody2D rb;
@@ -62,7 +72,7 @@ public class EnemyAI : MonoBehaviour
     {
         if(other.gameObject.tag == "Player")
         {
-            // essentially we are just doing a couple ground checks, and ensuring the player deliberatly jumped to kill the enemy
+            // essentially we are just doing a couple ground checks, and ensuring the player deliberatly landed on the enemy
             if(dead == false && other.gameObject.GetComponent<PlayerController>().grounded == false && other.gameObject.transform.position.y > transform.position.y)
             {
                 Destroy(gameObject);
@@ -70,7 +80,7 @@ public class EnemyAI : MonoBehaviour
                 dead = true;
                 Rigidbody2D playerRb = other.gameObject.GetComponent<Rigidbody2D>();
                 playerRb.velocity = Vector3.zero;
-                playerRb.AddForce(Vector2.up * playerBounceForce);
+                playerRb.AddForce(Vector2.up * playerBounceForce); // bounce player
                 other.gameObject.GetComponent<PlayerController>().ScreenShake();
                
             }

@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    // Used on the player
+
     //-------- Player Variables------------
 
     [Header("Player Variables")]
@@ -68,8 +70,8 @@ public class PlayerController : MonoBehaviour
     private bool isJumping; // used for hold jump
     private int numCurrentJumps; // internal jump counter
     private float deathScreenTimer;
-    private GameObject spawnedDeathEffect;
-    
+    private bool hasDied;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -174,9 +176,10 @@ public class PlayerController : MonoBehaviour
 
         if(isHit == true) // if you are hit
         {
-            if(spawnedDeathEffect == null) // disable collision, remove physics, and spawn a death effect.
+            if(hasDied == false) // disable collision, remove physics, and spawn a death effect.
             {
-                spawnedDeathEffect = (GameObject)Instantiate(playerDeathEffect, transform.position, Quaternion.identity);
+                hasDied = true;
+                Instantiate(playerDeathEffect, transform.position, Quaternion.identity);
                 sprite.SetActive(false);
                 gameObject.GetComponent<BoxCollider2D>().enabled = false;
                 rb.velocity = Vector3.zero;

@@ -2,7 +2,8 @@
 
 Build Instructions
 -------------------------
-In case build settings aren't saved, Make sure default resolution is 1920x1080, and under aspect ratio, click 16:9. You can then build and run the game.
+In case build settings aren't saved, ensure scene order: Startup, Main Menu, Level_1
+Make sure default resolution is 1920x1080, and under aspect ratio, click 16:9. You can then build and run the game.
 
 -------------------------
 Play Instructions
@@ -23,12 +24,12 @@ Rather than the above stated criteria,
 3) Player feedback and visuals are prioritized in every design aspect.
 
 -------------------------
-Font used
+Font used - CC0
 -------------------------
 "Good times" - https://www.1001fonts.com/good-times-font.html
 
 -------------------------
-SoundFX
+SoundFX - All CC0
 -------------------------
 UI 
 Hover: https://freesound.org/people/Eternitys/sounds/141121/
