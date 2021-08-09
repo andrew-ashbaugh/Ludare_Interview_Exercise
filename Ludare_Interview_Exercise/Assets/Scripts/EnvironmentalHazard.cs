@@ -21,6 +21,7 @@ public class EnvironmentalHazard : MonoBehaviour
         if(other.gameObject.tag == "Player")
         {
             other.gameObject.GetComponent<PlayerController>().isHit = true;
+
         }
     }
 }

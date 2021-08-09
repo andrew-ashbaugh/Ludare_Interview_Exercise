@@ -12,6 +12,9 @@ public class CoinScript : MonoBehaviour
 
     [SerializeField]
     private ParticleSystem coinParts;
+
+    [SerializeField]
+    private AudioSource pickupSfx;
     // Start is called before the first frame update
 
 
@@ -24,6 +27,7 @@ public class CoinScript : MonoBehaviour
             gameObject.GetComponent<CircleCollider2D>().enabled = false;
             Destroy(gameObject,2f);
             other.gameObject.GetComponent<PlayerResourceTracker>().coins += value;
+            pickupSfx.Play();
         }
     }
 }

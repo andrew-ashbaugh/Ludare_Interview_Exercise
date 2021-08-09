@@ -16,6 +16,8 @@ public class EnemyAI : MonoBehaviour
     [SerializeField]
     private float playerBounceForce;
 
+    [SerializeField]
+    private GameObject bumpFxPrefab;
 
     private float dir; //1 -> right, -1 -> left
     private Rigidbody2D rb;
@@ -42,7 +44,7 @@ public class EnemyAI : MonoBehaviour
         {
             dir = -dir;
             rb.AddForce(Vector3.right * dir * 100f); // add a little bump off the collider
-            rb.AddForce(Vector3.up * 50f);
+            Instantiate(bumpFxPrefab, transform.position, Quaternion.identity);
         }
 
     }
@@ -69,6 +71,7 @@ public class EnemyAI : MonoBehaviour
                 Rigidbody2D playerRb = other.gameObject.GetComponent<Rigidbody2D>();
                 playerRb.velocity = Vector3.zero;
                 playerRb.AddForce(Vector2.up * playerBounceForce);
+                other.gameObject.GetComponent<PlayerController>().ScreenShake();
                
             }
             

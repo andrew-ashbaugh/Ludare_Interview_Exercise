@@ -241,6 +241,7 @@ MonoBehaviour:
   startingDirection: -1
   explosionPrefab: {fileID: 8364071523312814265, guid: 1e68b9af2fac9204fbc260efb1345ba6, type: 3}
   playerBounceForce: 350
+  bumpFxPrefab: {fileID: 8875704863227068500, guid: 78cabd50db9b2524c8256b3d35de40ca, type: 3}
   dead: 0
 --- !u!1 &8644633363727906388
 GameObject:
